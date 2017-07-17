@@ -2,6 +2,13 @@ const http = require('http')
 const cheerio = require('cheerio')
 const nodeInput = process.argv[2]
 const rp = require('request-promise')
+const express = require('express')
+const app = express()
+
+app.get('/api/search/:query', (req, res) => {
+  const query = req.params.query
+  queryIMDB(query)
+})
 
 function queryIMDB(search) {
   const options = {
@@ -12,14 +19,26 @@ function queryIMDB(search) {
   }
   return rp(options)
     .then(function($) {
-      const movieNames = $('.findSection')
+      const moviesArray = $('.findSection')
         .first()
-        .find('.result_text')
+        .find('.result_text a')
         .map((i,element) => $(element).text())
         .toArray()
-      console.log( movieNames.join('\n') )
-      return movieNames.join('\n')
+      const yearsArray = $('.findSection')
+        .first()
+        .find('.result_text')
+        .map((i,element) => $(element).text().slice(moviesArray[i].length + 2, moviesArray[i].length + 8))
+        .toArray()
 
+      let output = {"movies": []}
+      for (i=0; i<moviesArray.length; i++) {
+        let movieObject = {}
+        movieObject.name = moviesArray[i]
+        movieObject.year = yearsArray[i]
+        output.movies.push(movieObject)
+      }
+      console.log(output)
+      return output
     })
     .catch(function (err) {
       console.log("There's an ERROR!!!")
@@ -27,8 +46,8 @@ function queryIMDB(search) {
 
 }
 
-if (require.main === module) {
-  queryIMDB(nodeInput)
-}
+const port = 3000
 
-module.exports = queryIMDB
+app.listen(port, () => {
+  console.log('Express server is listening on port', port)
+})

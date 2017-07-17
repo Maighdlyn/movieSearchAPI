@@ -1,0 +1,26 @@
+{
+  "name": "movie-search-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./movieSearchAPI.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maighdlyn/movieSearchAPI.git"
+  },
+  "author": "Emma Brown",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Maighdlyn/movieSearchAPI/issues"
+  },
+  "homepage": "https://github.com/Maighdlyn/movieSearchAPI#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "cheerio": "^1.0.0-rc.2",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  }
+}
